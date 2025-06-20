@@ -1,4 +1,4 @@
-These are the challenges I authored for DawgCTF2025!
+## These are the challenges I authored for DawgCTF2025!
 
 In total: 
   - 1 Networking - Hidden Network (in person)
