@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>What Sea Animal Are You?</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .quiz-container {
+      max-width: 700px;
+      margin: 60px auto;
+      background: rgba(0, 30, 60, 0.7);
+      padding: 30px;
+      border-radius: 15px;
+      color: #fff;
+    }
+
+    .quiz-container h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .quiz-container label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    .quiz-container select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .quiz-container button {
+      padding: 15px 30px;
+      font-size: 1rem;
+      background-color: #00BFFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .quiz-container button:hover {
+      background-color: #1E90FF;
+    }
+
+    .result {
+      margin-top: 30px;
+      font-size: 1.4rem;
+      line-height: 1.5;
+    }
+
+    .bubbles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -100px;
+      width: 20px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: rise 10s infinite ease-in;
+    }
+
+    .bubble:nth-child(1) { left: 10%; animation-duration: 12s; width: 15px; height: 15px; }
+    .bubble:nth-child(2) { left: 25%; animation-duration: 8s; }
+    .bubble:nth-child(3) { left: 40%; animation-duration: 11s; width: 25px; height: 25px; }
+    .bubble:nth-child(4) { left: 55%; animation-duration: 9s; }
+    .bubble:nth-child(5) { left: 70%; animation-duration: 10s; width: 10px; height: 10px; }
+    .bubble:nth-child(6) { left: 85%; animation-duration: 13s; width: 30px; height: 30px; }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bubbles">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h2>What Sea Animal Are You?</h2>
+    <form id="quizForm">
+      <label>1. What’s your favorite activity?</label>
+      <select name="q1">
+        <option value="dolphin">Exploring</option>
+        <option value="shark">Napping</option>
+        <option value="octopus">Solving puzzles</option>
+        <option value="jellyfish">Floating</option>
+        <option value="clownfish">Socializing</option>
+      </select>
+
+      <label>2. Pick a color:</label>
+      <select name="q2">
+        <option value="dolphin">Blue</option>
+        <option value="seaTurtle">Green</option>
+        <option value="shark">Gray</option>
+        <option value="jellyfish">Purple</option>
+        <option value="clownfish">Orange</option>
+      </select>
+
+      <label>3. What’s your ideal environment?</label>
+      <select name="q3">
+        <option value="clownfish">Coral reef</option>
+        <option value="shark">Deep ocean</option>
+        <option value="swordfish">Open water</option>
+        <option value="seaTurtle">Kelp forest</option>
+        <option value="octopus">Tide pool</option>
+      </select>
+
+      <label>4. How do you feel about working in a team?</label>
+      <select name="q4">
+        <option value="dolphin">I love teamwork!</option>
+        <option value="shark">I’m a lone wolf (or lone fish)</option>
+        <option value="seaTurtle">I’m flexible</option>
+        <option value="clownfish">I prefer a small, close group</option>
+        <option value="octopus">I like to lead</option>
+      </select>
+
+      <label>5. Pick a food:</label>
+      <select name="q5">
+        <option value="shark">Fish</option>
+        <option value="jellyfish">Plankton</option>
+        <option value="octopus">Crustaceans</option>
+        <option value="seaTurtle">Seaweed</option>
+        <option value="swordfish">Squid</option>
+      </select>
+
+      <button type="submit">Reveal My Sea Self!</button>
+    </form>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const animalProfiles = {
+      dolphin: { emoji: "🐬", name: "Dolphin", description: "You’re smart, friendly, and love to explore!" },
+      shark: { emoji: "🦈", name: "Shark", description: "You’re fierce, focused, and totally independent." },
+      octopus: { emoji: "🐙", name: "Octopus", description: "You’re clever, a little mysterious, and love to solve problems." },
+      jellyfish: { emoji: "🌊", name: "Jellyfish", description: "You're calm, dreamy, and go with the flow." },
+      seaTurtle: { emoji: "🐢", name: "Sea Turtle", description: "You’re peaceful, wise, and chill with nature." },
+      swordfish: { emoji: "🐟", name: "Swordfish", description: "You’re speedy, bold, and love open space!" },
+      clownfish: { emoji: "🐠", name: "Clownfish", description: "You’re bubbly, social, and full of color!" },
+    };
+
+    document.getElementById("quizForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const answers = [form.q1.value, form.q2.value, form.q3.value, form.q4.value, form.q5.value];
+
+      const tally = {};
+      answers.forEach(answer => {
+        tally[answer] = (tally[answer] || 0) + 1;
+      });
+
+      const topAnimal = Object.keys(tally).reduce((a, b) => tally[a] > tally[b] ? a : b);
+      const result = animalProfiles[topAnimal];
+
+      document.getElementById("result").innerHTML = `
+        <strong>${result.emoji} You are a ${result.name}!</strong><br>${result.description}
+      `;
+    });
+  </script>
+</body>
+</html>
